@@ -1,0 +1,80 @@
+%------ PACKAGES--------
+\documentclass[a4paper]{report} % Uses article class in A4 format
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+\usepackage{amsthm, amsmath, amssymb} % Mathematical typesetting
+\usepackage{pseudocode} % Environment for specifying algorithms in a natural way
+\usepackage{fancyhdr} % Headers and footers
+\usepackage{todonotes}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{todonotes}
+\usepackage{tikz}
+\usepackage{bbold}
+\usepackage{footnote}%(Salvo: I added this in order to add footnotes inside algorithms, I hope it does not cause any trouble)
+\usepackage{verbatim}%Salvo(For multiline comments)
+\usepackage{cancel}%Firas: to strike out terms in an equation
+\pagestyle{fancy} 
+% All pages have headers and footers
+\fancyhead{}\renewcommand{\headrulewidth}{0pt} % Blank out the default header
+\fancyfoot[L]{} % Custom footer text
+\fancyfoot[C]{} % Custom footer text
+\fancyfoot[R]{\thepage} % Custom footer text
+
+\usepackage{subfiles} 
+\usepackage{pdfpages}
+\usepackage{caption}
+\captionsetup{font=scriptsize,labelfont={sf,bf}}
+%-------------------
+
+
+\title{Numerical Methods} 
+\author{PCS Students \\ Academic year 2020/2021}
+\date{\today} 
+
+\begin{document}
+\par
+
+\maketitle
+\tableofcontents
+
+\chapter{Statistical Mechanics}
+    \input{Statistical mechanics/lecture 1}
+    \input{Statistical mechanics/lecture 2}
+    \input{Statistical mechanics/lecture 3}
+    \input{Statistical mechanics/lecture 4}
+\chapter{Integrators}
+    \input{Integrators/lecture 1}
+    \input{Integrators/lecture 2}
+    \input{Integrators/lecture 3}
+    \input{Integrators/lecture 4}
+\chapter{Monte Carlo}
+    \input{Monte Carlo/lecture 1}
+    \input{Monte Carlo/lecture 2}
+    \input{Monte Carlo/lecture 3}
+\chapter{Stochastic Differential Equations (SDE)}
+    \input{SDE/intro}
+    \input{SDE/Ito}
+    \input{SDE/FokkerPlanck}
+\chapter{Thermostats}
+    \input{Thermostats/lecture 1}
+    \input{Thermostats/lecture 2}
+    \input{Thermostats/lecture 3}
+    \input{Thermostats/lecture 4}
+%\chapter{Exercises}
+  %  \section{Verlet Exercise}
+ %   \includepdf[pages=-]{Integrators/ex1.pdf}
+%    \section{MC exercise}
+%    We will propose a solution for the MC exercise. The code has been commented widely to make it more readable.
+%    \includepdf[pages=-]{Exercise_MC.pdf}
+%From the last result we can make an important observation. The result for the mean distance is $4.4$ and not $4$ as one would have naively expected. This comes out because in a three dimensional system, such as the one of the two particles considered in the problem, the number of available states scales like $r^2$, where $r$ is the distance between the two particles. Therefore in computing the average distance there is an additional entropic term, that shifts away a little the average distance from the minimum of the energy. If one evaluates analytically this quantity, this factor comes out naturally using the canonical distribution and performing a change of variables in the integral from cartesian to spherical coordinates.
+%    \section{SDE Exercise}
+%    \includepdf[pages=-]{SDE/bussi_es.pdf}
+%    \section{Thermostats Exercise}
+%    \includepdf[pages=-]{Thermostats_Ex.pdf}
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+\end{document}

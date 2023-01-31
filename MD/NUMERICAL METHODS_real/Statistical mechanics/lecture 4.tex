@@ -1,0 +1,108 @@
+\section{The Gran-Canonical ensemble}
+Let's now consider a system for which the number of particles is allowed to fluctuate, as if the system were in contact with a larger system at the same temperature, with which it can exchange particles. In order to treat this case, we need to add to the phase space distribution function an extra index accounting for the number of particles N:
+\begin{equation}
+    \rho(\textbf{q},\textbf{p}) \rightarrow \rho_N(\textbf{q},\textbf{p}).
+\end{equation}
+A more general definition of Entropy may be written too:
+\begin{equation}
+        S = -k_B \sum_N \int \frac{d\Gamma_N}{h^{3N}}  \rho_N\ln{\rho_N},\label{S}
+\end{equation}
+  This corresponds to the most general integration over phase space of the expression $\rho_N\ln{\rho_N}$. $h^{3N}$ is a dimensional factor deriving from quantization of phase space. Being it a constant, we will neglect this factor from now on. Again, due to the maximum entropy principle, an expression for the density $\rho_N$ can be found maximizing entropy with the appropriate constraints:
+\begin{itemize}
+    \item $\sum_N \int d\Gamma_N  \rho_N = 1 \: \Rightarrow \: \text{normalization} $\\
+    \item $\sum_N \int d\Gamma_N  \rho_N H_N = <E> \: \Rightarrow \: \text{mean energy conservation}\\$
+    \item $\sum_N \int d\Gamma_N  \rho_N N = <N> \: \Rightarrow \: \text{mean n. of particles conservation}\\$
+\end{itemize}
+Hence, we're looking for $\rho_N^*$ such that the functional 
+\begin{equation}
+    \mathcal{F}[\rho_N] = -\sum_N\int d\Gamma_N \rho_N ( \ln{\rho_N} - \lambda + \beta H_N - \beta \mu N)
+\end{equation}
+is stationary. Imposing: 
+\begin{align}
+    \partial\mathcal{F}[\rho_N^*] &\equiv \mathcal{F}[\rho_N^*+\delta\rho_N] - \mathcal{F}[\rho_N^*]\\
+    &\simeq -\sum_N\int d\Gamma_N \delta\rho_N(\ln{\rho_N^*}+1-\lambda+\beta H_N -\beta \mu N)=0
+\end{align}
+we get the following expression:
+\begin{equation}
+\label{eq:rho_micro}
+    \rho_N^*=\frac{e^{-\beta(H_N-\mu N)}}{Z_{GC}}\:. 
+\end{equation}
+An \textit{ad hoc} extra factor $1/N!$ has to be introduced to obtain the correct additive Entropy (see Huang), so that the final result is:
+\begin{equation}\label{incriminate} 
+    \rho_N^*=\frac{e^{-\beta(H_N-\mu N)}}{N! Z_{GC}},\hspace{0.5 cm} \text{with} \: Z_{GC}= \sum_N\int d\Gamma_N \frac{e^{-\beta(H_N-\mu N)}}{N!}.
+\end{equation}
+The new Lagrange multiplier we have introduced, $\mu$, is called \textit{chemical potential}. We will later give an interpretation for it.\\
+
+\textit{\textbf{Comment:} I believe Micheletti was imprecise here. In eq.\ref{incriminate} the factor $1/N!$ should be present in the expression for $Z$ but not in the one for $\rho$. Actually, if both expressions contained it, we would be multiplying $\rho$ for a $N!/N!=1$ factor and eq.\ref{S} would remain unchanged. The correct interpretation is the following: being atoms quantum mechanically indistinguishable, any permutation of the atoms indexes does not produce a new state of the system. Then the factor $1/N!$ accounts for the fact that an infinitesimal volume $dpdq$ in phase space corresponds to $dpdq/N!$ different micro-states only. In conclusion, when taking averages of functions $f(p,q)$ over the possible micro-states of the system, we should write integrals as:
+\begin{equation}
+    <f> = \sum_N \int \frac{d\Gamma_N}{N!h^{3N}}  \rho_N f(q,p).
+\end{equation}
+This explains why $1/N!$ is only present in the expression for $Z$. Also, computing entropy like this all factors $1/N!$ simplify apart from the one inside the logarithm, so that we obtain the correctly rescaled expression.
+}\\
+
+As an example, we can compute the Gran-Canonical partition function $Z_{GC}$ for an ideal gas:
+\begin{equation}
+    \begin{split}
+    Z_{GC} &= \sum_N \frac{1}{N!}\int d\Gamma_N e^{-\beta(H_N-\mu N)}\\
+    &=\sum_N \frac{e^{\beta \mu N}}{N!}\int d\Gamma_N e^{-\beta H_N}\\
+    &=\sum_N \frac{e^{\beta \mu N}}{N!}V^N\biggl( \frac{2\pi m}{\beta}\biggr)^{3N/2}\\
+    &=\sum_N \frac{x^N}{N!}=e^x, \hspace{0.5 cm} \text{with} \:x=e^{\beta \mu}V \biggl(\frac{2\pi m}{\beta}\biggr)^{3/2}.
+    \end{split}
+\end{equation}
+We have used the expression \ref{eq:zcannone} for the Canonical partition function computed in the previous section. We call the factor $z=e^{\beta \mu}$ \textit{fugacity}. The mean number of particles $<N>$ can be computed too. Being $Z_{GC}$ a cumulant generating function, 
+\begin{equation}
+    <N>=\frac{\partial ln Z_{GC}}{\partial (\beta \mu)}
+    =e^{\beta \mu}V \biggl(\frac{2\pi     m}{\beta}\biggr)^{3/2}. \label{eq.N}
+\end{equation}
+Consequently:
+\begin{equation}
+   \begin{split}
+    & e^{-\beta \mu}=\frac{V}{<N>}\biggl(\frac{2\pi m}{\beta}\biggr)^{3/2} \\
+    & \mu=-K_B T ln \biggl[\frac{V}{<N>}\biggl(\frac{2\pi m}{\beta}\biggr)^{3/2} \biggr].
+    \end{split}
+\end{equation}
+The equation we have obtained for $\mu$ tells us something important about its physical interpretation. Recalling the equation for the \textit{free energy} for a canonical ensemble in the case of an ideal gas,
+\begin{equation}
+    \begin{split}
+    F_{CAN}&=-k_B T \ln{Z_{CAN}}\\
+    &=-k_B T ln\biggl[ \frac{V^N}{N!}\left(\frac{2\pi m}{\beta} \right)^{3N/2}\biggr]\\
+    &=-k_B T \biggl[N\ln{V}-ln(N!)+\frac{3N}{2}\ln{\left(\frac{2\pi m}{\beta} \right)}\biggr]\\
+    &\simeq -k_B T \biggl[N\ln{V}-(NlnN-N)+\frac{3N}{2}\ln{\left(\frac{2\pi m}{\beta} \right)}\biggr],\\
+    \end{split}
+\end{equation}
+where we have used Stirling's approximation, we have that:
+\begin{equation}
+   \frac{\partial F_{CAN}}{\partial N}=-K_B T ln \biggl[\frac{V}{N}\biggl(\frac{2\pi m}{\beta}\biggr)^{3/2} \biggr]=\mu.
+\end{equation}
+In conclusion, $\mu$ corresponds to the difference in \textit{free energy} due to variations of the number of particles the system is composed of.
+
+\subsection{Equilibrium condition for chemical reactions}
+The \textit{chemical potential} $\mu$ turns out to be very useful in some chemistry problems. Let's consider a generic chemical reaction involving n reactants and m products:
+\begin{equation}
+    \nu_1 x_1 + ... + \nu_n x_n \rightleftharpoons \nu_{n+1} x_{n+1} + ... + \nu_{n+m} x_{n+m}
+\end{equation}
+Clearly, when elements react, the number of molecules $N_i$ of element i varies: $N_i \rightarrow N_i+\delta N_i$. This makes the system we're studying a Gran-Canonical one. On the other hand, starting from equilibrium, the ratio $\delta N_i/\nu_i$ between the variation of the number of molecules of element i and its stoichiometric coefficient must be constant and equal for all i's. Also, if the system keeps at equilibrium the \textit{free energy} F must be minimal. Then:
+\begin{equation}
+    \begin{split}
+    \partial F &= F(N_1+\delta N_1,...,N_{n+m}+\delta N_{n+m})-F(N_1,...,N_{n+m})\\
+    &=\frac{\partial F}{\partial N_1}\delta N_1+...+\frac{\partial F}{\partial N_{n+m}}\delta N_{n+m}\\
+    &=\mu_1 \delta N_1+...+\mu_{n+m} \delta N_{n+m}=0.
+    \end{split}
+\end{equation}
+Knowing $\delta N_i/\nu_i= const=\delta N$, with $\delta N$ arbitrary, we get to the equilibrium condition:
+\begin{equation}
+    \sum_i \mu_i \nu_i=0.
+\end{equation}
+Notice that, for convention, stoichiometric coefficients $\nu_i$ are positive for reactants and negative for products. This same condition may be written in terms of the fugacity $z$ as:
+\begin{equation}
+    e^{\beta\sum_i \mu_i \nu_i}=\prod_i (z_i)^{\nu_i}=1.\label{eq.fugacity}
+\end{equation}
+From eq.\ref{eq.N}:
+\begin{equation}
+    z=\bigl[ v \bigl( \frac{2\pi m}{\beta}\bigr)^{3/2}\bigr]^{-1}, 
+\end{equation}
+where $v=\frac{V}{N}$ is the concentration of the $i_{th}$ element. Then eq.\ref{eq.fugacity} tells us:
+\begin{equation}
+    \prod_i v_i^{\nu_i}\sim\prod_i (m^{\nu_i})^{-3/2}.  
+\end{equation}
+This is known as the law of mass action, stating that the the quantity $\prod_i v_i^{\nu_i}$ is a constant for reactions at equilibrium, namely the \textit{equilibrium constant}.  

@@ -1,0 +1,99 @@
+\section{Basic concepts of statistical mechanics}
+The aim of statistical mechanics is to study the general laws of thermodynamics and to determine the thermodynamics functions of a given system. In doing so equilibrium is assumed, i.e. we are not interested in describing how a system approaches equilibrium. Since the systems considered are composed of a very large number of particles the limit $N, V\to\infty$, with $\frac{N}{V} =$ constant is analyzed. (The so called thermodynamic limit).
+The state of a system of $N$ particles is specified by $3N$ canonical coordinates $\{q_1,\dots,q_n\}$ and by $3N$ conjugate momenta $\{p_1,\dots,p_n\}$. What we have then is a $6N$ dimensional space, ($6N$ degrees of freedom), called the $\Gamma$ space. Notice that from a classical point of view everything is specified, and the equations of motion of the particle $i$ are given by:
+\begin{equation}
+\label{eqn:first}
+\begin{cases}
+\dot{q_i} = \frac{\partial H}{\partial p_i} \\
+\dot{p_i} = -\frac{\partial H}{\partial q_i} 
+\end{cases}
+\end{equation}
+where $H = H(q_i,\dots,q_{3N};p_i,\dots,p_{3N})$ is the Hamiltonian of the system. Notice that Eq. (\ref{eqn:first}) is invariant under time reversal and uniquely determines the motion of every particle when the position of the particle is given at any time. For this reason we can have only $2$ types of trajectories: closed or open. In the second case the curve never intersects itself.
+Although this set of equations gives an exact dynamics of our system we are not interested in the position and momentum of every particle at every time, because of the huge number of particles. What we rather want to analyze are global properties of the system, through the possible configurations of the particles. In this way, once we have defined some macroscopic conditions, we are not able to distinguish between two different configurations both satisfying the same macroscopic properties. We call an \textit{ensemble} the totality of the configurations subjected to equal macroscopic properties. Thus we never speak about one single system, but we consider an infinite number of configurations belonging to a particular ensemble.
+
+To this purpose let's introduce the probability density function $\rho(\textbf{q},\textbf{p})$, such that 
+\begin{equation}\lim_{T\to\infty}\frac{\Delta t_i}{T} = \rho_i \Delta\Gamma 
+\end{equation} where $\Delta\Gamma = \Delta p^{3N}$ $\Delta q^{3N}$ and $\Delta t_i$ is the time spent in a volume of the discretized grid of the $\Gamma$ space, i.e. the time spent by the system in a possible configuration. If we then consider a generic observable $f(\textbf{q},\textbf{p})$, and we call its average $\bar{f}$, we have that
+\begin{align}
+\bar{f} &= \lim_{T\to\infty}\int_0^T dt\,f(\textbf{q}(t),\textbf{p}(t))\frac{1}{T}\\
+&=\lim_{T\to\infty}\sum_i \Delta t_i\,f_i(\textbf{q},\textbf{p})\frac{1}{T}\\
+&=\sum_i\lim_{T\to\infty}\Delta t_i\,f_i(\textbf{q},\textbf{p})\frac{1}{T}\\
+&=\sum\rho_i(\textbf{q},\textbf{p})f_i(\textbf{q},\textbf{p})\Delta\Gamma_i\\
+&=\int d\Gamma\rho(\textbf{q},\textbf{p})f(\textbf{q},\textbf{p})
+\end{align}
+where we can exchange the limit with the sum if the sum converges. Thus at the end we have that
+\begin{equation}
+\bar{f} = \lim_{T\to\infty}\frac{1}{T}\int_0^T dt\,f(\textbf{q},\textbf{p}) = \int d\Gamma \rho(\textbf{q},\textbf{p})f(\textbf{q},\textbf{p})
+\end{equation}
+where in the last equation we have no information about time and we are left with an integral over the phase space.
+
+Let's now prove the \textbf{Liouville's Theorem}, that states that:
+\begin{equation}
+\frac{d\rho}{dt} = \frac{\partial\rho}{\partial t}+\sum_{i=1}^{3N}\left(\frac{\partial\rho}{\partial q_i}\dot{q}_i+\frac{\partial\rho}{\partial p_i}\dot{p}_i\right)=0
+\end{equation}
+\textbf{Proof:} We denote with $\textbf{v}$ the $6N$ vector of the generalized velocities, such that $\textbf{v} = (\dot{q}_1,\dots,\dot{q}_{3N};\dot{p}_1,\dots,\dot{p}_{3N})$. Since the total number of systems in an ensemble (recall that an ensemble is specified by the macroscopic properties) is conserved, the number of points leaving a given volume in the $\Gamma$ space per second must be equal to the rate of decrease of the number of points in the same volume. Then if we call $\Gamma_0$ an arbitrary volume of $\Gamma$ and $S$ its surface, we have that:
+\begin{equation}
+-\frac{\partial}{\partial t}\int_{\Gamma_0}d\Gamma\,\rho = \int_{\partial\Gamma_0}dS\, \textbf{n}\cdot(\rho\textbf{v})
+\end{equation}
+where \textbf{n} is the vector locally normal to the surface $S$. The next step is given by the divergence theorem
+\begin{equation}
+\int_{\partial\Gamma_0}dS\, \textbf{n}\cdot(\rho\textbf{v}) = \int_{\Gamma_0} d\Gamma\,\nabla\cdot(\rho\textbf{v})=-\int_{\Gamma_0}d\Gamma\,\frac{\partial\rho}{\partial t}
+\end{equation}
+Since $\Gamma_0$ is an arbitrary volume, the previous relation holds if
+\begin{equation}
+-\frac{\partial\rho}{\partial t} = \nabla\cdot(\rho\textbf{v})
+\end{equation}
+Being $\nabla = \left(\frac{\partial}{\partial q_1},\dots,\frac{\partial}{\partial q_{3N}};\frac{\partial}{\partial p_{1}},\dots,\frac{\partial}{\partial p_{3N}}\right)$ it follows that
+\begin{align}
+-\frac{\partial\rho}{\partial t}&=\nabla\cdot(\textbf{v}\rho)=\sum_{i=1}^{3N}\left[\frac{\partial}{\partial q_i}(\dot{q}_i\rho)+\frac{\partial}{\partial p_i}(\dot{p}_i\rho)\right]\\
+&=\sum_{i=1}^{3N}\left[\frac{\partial\rho}{\partial q_i}\dot{q}_i+\frac{\partial\rho}{\partial p_i}\dot{p}_i\right]+\sum_{i=1}^{3N}\rho\left[\frac{\partial\dot{q}_i}{\partial q_i}+\frac{\partial\dot{p}_i}{\partial p_i}\right]
+\end{align}
+But now we can use the equations of motion \ref{eqn:first} and the second term of the above relation becomes $0$. So we are left with
+\begin{equation}
+\label{eqn:second}
+-\frac{\partial\rho}{\partial t} = \sum_{i=1}^{3N}\left[\frac{\partial\rho}{\partial q_i}\dot{q}_i+\frac{\partial\rho}{\partial p_i}\dot{p}_i\right]
+\end{equation}
+If now we consider the total derivative of $\rho$ with respect of time we have:
+\begin{equation}
+\frac{d\rho}{dt} = \frac{\partial\rho}{\partial t} + \sum_{i=1}^{3N}\left[\frac{\partial\rho}{\partial q_i}\dot{q}_i+\frac{\partial\rho}{\partial p_i}\dot{p}_i\right] = 0
+\end{equation}
+which is zero for \ref{eqn:second}.
+$\square$
+
+Liouville's Theorem shows that the probability density in the phase space is a constant and it acts as an incompressible fluid. As a final comment, notice that if $\rho$ is stationary, i.e. $\frac{\partial\rho}{\partial t} = 0$, then $\sum_{i=1}^{3N}\left[\frac{\partial\rho}{\partial q_i}\dot{q}_i+\frac{\partial\rho}{\partial p_i}\dot{p}_i\right] = 0$, or $\{\rho,H\}=0$, where $\{ \}$ are the Poisson Brackets. In this case $\rho$ is a constant of the motion and thus it can only depend on constants of the system.
+\subsection{The micro-canonical ensemble}
+As first thing we state the \textbf{Postulate of Equal a Priori Probability}: "given a macroscopic system in thermodynamic equilibrium, all micro-states with the same energy are visited with the same probability". (Every possible configuration is called a 'micro-state'). This means that in the micro-canonical ensemble, where every system has $N$ particles, a volume $V$ and an energy between $E$ and $E+\Delta E$, the density function assumes the following form:
+\begin{equation}
+\label{eqn:third}
+\rho(\textbf{q},\textbf{p}) = 
+\begin{cases}
+\text{constant} & \text{if}\quad E \le H(\textbf{q},\textbf{p})\le E+\Delta E\\
+0 & \text{otherwise.}
+\end{cases}
+\end{equation}
+Now we define the entropy of the system as $S = k_b \log(\Gamma_{\Delta E})$, where $\Gamma_{\Delta E}$ is the volume of the region of the phase space such that $\rho(\textbf{q},\textbf{p})\neq 0$ and $K_b$ is the Boltzmann constant. The role of the $\log$ can be understood by looking at the following expression valid for an ideal gas (this is just a particular example):
+\[
+\Gamma_{\Delta E}(E) = \int d\Gamma\rho = \int d^{3N}q\int d^{3N}p\,\rho = V^N \int d^{3N}p\,\rho.
+\]
+\textbf{Comment:} The equation above was written by Micheletti but it is probably wrong. In fact $\Gamma_{\Delta E}(E)$ is the volume of the phase space for a particular $E$, i.e. the degeneracy of the system, but $\int d\Gamma\rho = \int_{\Gamma E} d\Gamma\rho = 1$, where $\Gamma E$ are the points of the phase space such that $E \le H(\textbf{q},\textbf{p})\le E+\Delta E$. This would mean that the degeneracy is $1$ ($\rho$ is equal to $\left(\int_{\Gamma E} d\Gamma\right)^{-1}$ since the probability is the same for every microstate), while we expect it to be equal to $\int_{\Gamma E} d\Gamma$. So I think Micheletti put the $\rho$ because he took initially the integral over all the phase space, and $\rho$ is zero over the wrong points, making the domain correct. But of course then we would get $\Gamma_{\Delta E}(E) = 1$ that can't be right, so I'd say $\Gamma_{\Delta E}(E) = \int_{\Gamma E} d\Gamma$, as it is also written in Huang at page 130.\\
+
+If we take the logarithm of the expression above we obtain $N\log(V)+\text{something}$, and so the entropy is extensive as we want it to be. 
+But to be more precise, let's show that $S$ defined in this way is extensive in general. In order to do this, we can consider a system composed by two sub-systems, such that the total energy $E$ is fixed $E = E_1+E_2$ where $E_1$ and $E_2$ are the (not fixed) energies of first and of the second sub-system. We want to compute $S_{1+2}$ and we want that $S_{1+2} = S_1+S_2$, i.e. an extensive quantity. We have that
+\begin{equation}
+\label{eqn:fourth}
+\Gamma_{1+2}=\sum_{E_1}\Gamma_1(E_1)\,\Gamma_2(E_2) = \sum_{E_1}\Gamma_1(E_1)\,\Gamma_2(E-E_1)
+\end{equation}
+where the energy is discretized by $\Delta E$, which means that $E_1 = 0, \Delta E, 2\Delta E $ etc. $\Gamma_{1+2}$ is the degeneracy of the total system, whereas $\Gamma_1$ and $\Gamma_2$ are the degeneracies of the sub-systems. Now it is clear that by construction the object \ref{eqn:fourth} is the sum of $E/\Delta E$ positive elements. There will be surely an element in this sum greater or equal than the others, and let it be $\Gamma_1(E_1^\ast)\Gamma_2(E-E_1^\ast)$. Then it follows trivially that
+\begin{equation}
+\Gamma_1(E_1^\ast)\,\Gamma_2(E-E_1^\ast)\le\Gamma_{1+2}\le \Gamma_1(E_1^\ast)\Gamma_2(E-E_1^\ast)\,\frac{E}{\Delta E}
+\end{equation}
+If now we multiply by $k_b$ and we take the $\log$, we obtain:
+\begin{equation}
+S_1(E_1^\ast)+S_2(E-E_1^\ast)\le S_{1+2}\le S_1(E_1^\ast)+S_2(E-E_1^\ast)+k_b\log(\frac{E}{\Delta E})
+\end{equation}
+If we are dealing with systems where $N_1, N_2\to\infty$, we have that $\log(\Gamma_1)\propto N_1$, $\log(\Gamma_2)\propto N_2$ and $E\propto N_1+N_2$. Thus the term $k_b\log(\frac{E}{\Delta E})$ can be neglected since it goes as $\log(N)$ and $\Delta E$ is independent of N ($N = N_1+N_2$). So in this approximation it follows finally that
+\begin{equation}
+S_{1+2} = S_1(E_1^\ast)+S_2(E-E_1^\ast)
+\end{equation}
+which proves that $S$ is extensive. Notice that we also proved that the energies of the subsystems have the values $E_1^\ast$ and $E-E_1^\ast$. If you want to read this first part from the book "Statistical Mechanics" by Huang, have a look at chapters 3.4, 6.1, 6.2.
+

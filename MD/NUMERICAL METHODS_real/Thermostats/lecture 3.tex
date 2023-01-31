@@ -1,0 +1,87 @@
+Langevin equation satisfies detailed balance, in order to show this let's calculate 
+    \begin{equation}
+        \frac{P(p'|p) P(p)}{P(p|p') P(p')}
+    \end{equation}
+the probability to do the forward move and compare it with the probability of backward move. To make calculation more simple set $m = 1$ and $K_b T = 1$. We have that 
+    \begin{equation}
+        p' = c_1 p + c_2 R
+    \end{equation}
+where R is a normal distributed random variable with zero mean and unitary variance. The probability of observing a value of $p'$ given $p$ is a gaussian centered in $c_1 p$ (the way I generate $p'$ is to pick $p$ and I multiply by a factor $c_1$ and then add a random number with zero average) with variance $c_2^2$, that is:
+    \begin{equation}
+        P(p'|p) = \frac{1}{\sqrt{2\pi}c_2} e^{\frac{-(p' - c_1 p)^2}{2 c_2^2}}
+    \end{equation}
+through the same argument:
+    \begin{equation}
+        P(p|p') = \frac{1}{\sqrt{2\pi}c_2} e^{\frac{-(p - c_1 p')^2}{2 c_2^2}}.
+    \end{equation}
+The stationary probability in $p$ and $p'$ are:
+    \begin{equation}
+        P(p) = \frac{1}{\sqrt{2\pi}} e^{\frac{-p^2}{2}}\quad
+        P(p') = \frac{1}{\sqrt{2\pi}} e^{\frac{-p'^2}{2}}
+    \end{equation}
+In order to have detailed balance satisfied, we have to check that:
+    \begin{equation}
+        \frac{1}{\sqrt{2\pi}} e^{\frac{-p^2}{2}} \frac{1}{\sqrt{2\pi}c_2} e^{\frac{-(p' - c_1 p)^2}{2 c_2^2}} = \frac{1}{\sqrt{2\pi}} e^{\frac{-p'^2}{2}} \frac{1}{\sqrt{2\pi}c_2} e^{\frac{-(p - c_1 p')^2}{2 c_2^2}}.
+    \end{equation}
+We can neglect the normalisation pre-factors and since we have a product of exponentials, the equation is satisfied if the exponents are equal, so:
+    \begin{equation}
+       -\frac{p^2}{2} - \frac{(p' - c_1 p)^2}{2 c_2^2} = -\frac{p^2}{2} - \frac{(p' - c_1 p)^2}{2 c_2^2}
+    \end{equation}
+changing sign and expanding the squares:
+    \begin{equation}
+        \frac{p^2}{2} + \frac{p'^2}{2 c_2^2} + \frac{c_1^2 p^2}{2 c_2^2} - \frac{c_1 p p'}{c_2^2} = \frac{p'^2}{2} + \frac{p^2}{2 c_2^2} + \frac{c_1^2 p'^2}{2 c_2^2} - \frac{c_1 p p'}{c_2^2}
+    \end{equation}
+collecting $p$ and $p'$:
+    \begin{equation}
+        \frac{p^2}{2} \Big(1 + \frac{c_1^2}{c_2^2} - \frac{1}{c_2^2}\Big) = \frac{p'^2}{2} \Big(1 + \frac{c_1^2}{c_2^2} - \frac{1}{c_2^2}\Big)
+    \end{equation}
+and finally we notice that :
+    \begin{equation}
+        \Big(1 + \frac{c_1^2}{c_2^2} - \frac{1}{c_2^2}\Big) = \Big(1 + \frac{c_1^2 - 1}{c_2^2}\Big) = \Big(1 - \frac{c_2^2}{c_2^2}\Big) = 0.
+    \end{equation}
+The way we have integrated the Langevin equation of motion makes easy to estimate the total violation of detailed balance. In order to do that we define a total energy "quoted" which one can interpret as total energy of the system $-$ the sum of the increments given by the thermostat. This quantity, that we could call Effective energy, is defined :
+    \begin{equation}
+        \Delta\Tilde{H} = - K_b T \log \Big( \frac{P(p',q'|p,q) P(p',q')}{P(p,q|p',q') P(p,q)} \Big)
+    \end{equation}
+I can use it to compute the acceptance for the hybrid Monte Carlo as $\min\big(1, e^{-\frac{\Delta\Tilde{H}}{K_bT}} \Big)$.
+
+Observe that there are different way to integrate Langevin equation, just to recap it is:
+\begin{equation}
+    \begin{cases}
+    dq = \color{yellow}{\frac{p}{m}dt}\\
+    dp = \color{green}{f dt} \color{red}{-\gamma p dt + \sqrt{2mK_BT\gamma}* \boldsymbol{\delta w}}
+    \end{cases}
+\end{equation}
+Defining $B =$ "moving velocity" (green part in eq. 5.26), $A =$ " moving position (yellow part in eq. 5.26) and $O = $ "noise" (red part in eq. 5.26). In this language
+what we have done in algorithm 22 is to use trotter splitting in the following order: $OBABO$.\\
+Another algorithm is $BAOAB$ proposed by Leimkuhler, that gives a more accurate sampling.\\
+Considering Langevin thermostats, if we look at the potential energy it will achieve the expected value that can be shown to be related to the friction:
+if the friction is zero the system will never relax,\\
+if the friction is higher then a middle $\gamma$ the system will relax slower.\\
+Instead looking at the kinetic energy we will observe that higher is $\gamma$ faster the system will relax.
+\subsection{Stochastic velocity rescaling}
+The global thermostats studied until now don't give the correct distribution. Our goal is to draw, at every step, kinetic energy from a Gamma distribution:
+    \begin{equation*}
+        P(K) \propto K^{\frac{N_F}{2} -1}e^{-\beta K}
+    \end{equation*}
+The stochastic differential equation on the Kinetic energy (that has the correct stationary distribution) is obtained starting from the equation of Berendsen thermostat and adding "something" so that the stationary distribution is the canonical one. 
+Our equation is 
+    \begin{equation}
+        \frac{\partial P(K)}{\partial t} = - \frac{\partial J(K)}{\partial K},
+    \end{equation}
+because of we are studying a one dimensional problem, balance and detailed balance are equivalent, so we impose $J = 0$ that is:
+    \begin{equation}
+        J = AP - \frac{1}{2} \frac{\partial}{\partial x}B^2 P = 0.
+    \end{equation}
+I would like to choose $B$ such that $A = -\frac{1}{\tau}(K - \Bar{K})$ (Berendsen thermostat). Bussi's ansatz, and then we will verify it, is $B = 2\sqrt{\frac{\Bar{K}K}{\tau N_F}}$. Let's calculate $A$ imposing $J=0$:
+    \begin{align*}
+        A &= \frac{1}{2 P} \frac{\partial}{\partial K}(B^2 P) = \frac{1}{2 P} \frac{\partial}{\partial K}(4\frac{\Bar{K}K}{\tau N_F} P)\\
+        &= \frac{2}{P}\frac{\Bar{K}}{\tau N_F} \frac{\partial}{\partial K}(K P) = \frac{2}{P}\frac{\Bar{K}}{\tau N_F}(P + K\frac{\partial P}{\partial K})\\
+        &= \frac{2}{P}\frac{\Bar{K}}{\tau N_F}(P + K(\frac{N_F}{2} -1)\frac{P}{K} - \beta P K) = \frac{2}{P}\frac{\Bar{K}}{\tau N_F}(\frac{N_F}{2} - \frac{PK}{K_b T})\\
+        &=\frac{2\Bar{K}}{\tau N_F}\frac{N_F}{2} - \frac{2\Bar{K}}{\tau N_F}\frac{K}{K_b T} = \frac{\Bar{K} - K}{\tau}
+    \end{align*}
+Once we have checked the accuracy of the choice, the final equation we want to implement is 
+    \begin{equation}
+    \label{stochastic velocity rescaling}
+        dK=\frac{(\bar K-K)}{\tau}dt + 2\sqrt{\frac{\Bar{K}K}{\tau N_F}}dW.
+    \end{equation}

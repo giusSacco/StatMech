@@ -1,0 +1,66 @@
+\section{Maximum entropy principle and microcanonical ensemble}
+As before, consider a system divided in two compartments with energies $E_1$ and $E_2$. The two subsystems can exchange energy, but the sum $E_1+E_2 = E$ is fixed. We have already demonstrated that the phase space of the system at the equilibrium is given by 
+\begin{equation}
+    \Gamma_{1+2}(E) = \Gamma_1(E_1^*)\,\Gamma_2(E-E_1^*),
+\end{equation}
+where $E_1^*$ is the energy that maximizes $\Gamma_{1+2}$. This relation is clearer if one thinks of $\Gamma_i$ as the degeneracy of a state with an energy $E_i$. The equilibrium condition then becomes
+\begin{equation}
+    \frac{\partial \Gamma_{1+2}}{\partial E_1}\bigg|_{E_1^*} = \frac{\partial \Gamma_1(E_1)}{\partial E_1} \Gamma_2(E - E_1) + \Gamma_1(E_1)\frac{\partial \Gamma_2(E - E_1)}{\partial E_1} = 0.
+\end{equation}
+Since we have the constraint $E_2 = E-E_1$, we can take the derivative of $\Gamma_2$ with respect to $E_2$, changing its sign. Ordering the terms and multiplying by the Boltzmann constant $k_B$ we obtain
+\begin{equation}
+    \frac{k_B}{\Gamma_1} \frac{\partial \Gamma_1}{\partial E_1} = \frac{k_B}{\Gamma_2} \frac{\partial \Gamma_2}{\partial E_2} \: \Longrightarrow \:
+    k_B \frac{\partial (\ln{\Gamma_1})}{\partial E_1} = k_B \frac{\partial (\ln{\Gamma_2})}{\partial E_2}
+\end{equation}
+and $k_B\ln{\Gamma}$ was our definition of entropy $S$. So the equilibrium condition is 
+\begin{equation}
+    \frac{\partial S_1}{\partial E_1} = \frac{\partial S_2}{\partial E_2}
+\end{equation}
+which is equivalent to having the same temperature. \\ \\
+
+Entropy is an observable, so its expected value can be written as $S = \int d\Gamma \rho f(q,p)$ for a certain function $f$ of positions and momenta. From an analogy with probability theory and Shannon entropy, entropy turns out to be
+\begin{equation}
+    S = -\int d\Gamma \rho \ln{\rho}.
+\end{equation}
+which is also equal to $S=\ln{\Gamma}$ (for $k_B=1$).
+We don't give a formal proof of this statement, but we show that it gives correct results in two particular limit cases:
+\begin{itemize}
+    \item case 1: $n$ energy levels, with $p_1 = 1$ and $p_{i\neq 1} = 0 \: \Rightarrow \: S=0$. \\
+    \item case 2: $p_i = 1/n$ for all $i \: \Rightarrow \: S= -\frac{1}{n}\ln(\frac{1}{n})^n = \ln{n}$.
+\end{itemize}
+The maximum entropy principle states that a system in equilibrium tends to maximize entropy, given the constraints, for every probability density $\rho$. For the microcanonical ensemble, we consider the following constraints for $\rho$:
+\begin{gather}
+    \int d\Gamma \rho = 1 \: \Rightarrow \: \text{normalization} \\
+    \rho(\mathbf{q},\mathbf{p}) = 0 \: \text{if} \: H(\mathbf{q},\mathbf{p}) \not\in (E,E+\Delta).
+\end{gather}
+For $k_B=1$, $S = -\int d\Gamma \rho \ln{\rho}$ and introducing the Lagrange multiplier $\lambda$ we can construct the functional
+\begin{equation}
+    \mathcal{F}[\rho] = -\int d\Gamma (\rho \ln{\rho} - \lambda\rho)
+\end{equation}
+and our goal is to find $\rho^*$ that makes it stationary. More explicitly, we want the functional differential
+\begin{equation}
+    \partial\mathcal{F}[\rho^*] \equiv \mathcal{F}[\rho^*+\delta\rho] - \mathcal{F}[\rho^*]
+\end{equation}
+with no linear terms in $\delta\rho$. Then we get
+\begin{align}
+\label{eq:rho_micro}
+    \partial\mathcal{F}[\rho^*] &= -\int d\Gamma [(\rho^*+\delta\rho)\ln(\rho^*+\delta\rho) - \lambda(\rho^*+\delta\rho)] + \int d\Gamma (\rho^*\ln\rho^* - \lambda\rho^*) \nonumber \\
+    &= -\int d\Gamma (\delta\rho\ln{\rho^*}+\delta\rho-\lambda\,\delta\rho) + h.o.t. \nonumber \\
+    &= -\int d\Gamma \delta\rho \,(\ln{\rho^*}+1-\lambda) = 0
+\end{align}
+where in the second line we have used the fact that 
+\begin{equation}
+    \ln(\rho^*+\delta\rho) \simeq \ln{\rho^*} + \frac{\delta\rho}{\rho^*} + h.o.t.
+\end{equation}
+Since eq. (\ref{eq:rho_micro}) has to hold for every $\delta\rho$, the integrand must be null, i.e.
+\begin{equation}
+    \ln{\rho^*}(\mathbf{q},\mathbf{p}) = \lambda-1
+\end{equation}
+that does not depend on $\mathbf{q}$ and $\mathbf{p}$, so we obtain a uniform \textit{a priori} probability. This is due to the fact that we had no constraints, except for the normalization of the probability density. We can repeat the same calculation adding the constraint 
+\begin{equation}
+    \int d\Gamma \rho\,H = \bar{E}
+\end{equation}
+that corresponds to the canonical ensemble.
+
+
+

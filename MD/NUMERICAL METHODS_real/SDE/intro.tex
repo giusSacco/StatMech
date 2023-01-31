@@ -1,0 +1,41 @@
+%Here there is the introduction
+
+The general form of a first order differential equation is
+\[
+dx=A(x,t)dt,
+\]
+which can be expressed as 
+\begin{equation}\label{s}
+\Delta x=A(x,t)\Delta t
+\end{equation}
+in the limit $\Delta t \to 0$. In order to consider the noise, we can introduce in Eq. \eqref{s} a random component, that is
+\begin{equation}\label{sd}
+\Delta x=A(x,t)\Delta t+B(x,t)\sqrt{\Delta t}R(t),
+\end{equation}
+
+where $R(t)$ is a random variable drawn from a normal distribution with zero mean and unitary variance\footnote{We can always trace back to this case redefining $A(x,t)$ and $B(x,t)$ when it is drawn from a normal distribution with different mean and variance.}, while the term $B(x,t)$ represents the amplitude of the noise.
+
+To understand why in the random component the power of $\Delta t$ is $1/2$, 
+let us first consider just the deterministic part, that is the case in which $B(x,t)=0$ (and for simplicity $A(x,t)=A$, \emph{i.e.} $A(x,t)$ is constant). Thus, defining $\delta t = \Delta t/N$, we have
+\[
+\Delta x=A\sum_{i=1}^N\delta t=A\sum_{i=1}^N\frac{\Delta t}{N}=A\Delta t.
+\]
+This means that in this case the power of $\Delta t$ must be $1$, because it should be the same if we move once for $\Delta t$ or $N$ times for $\Delta t/N$.
+
+In the case $A(x,t)=0$ and $B(x,t)=B$, \emph{i.e.} $B(x,t)$ is constant, we have
+\[
+\Delta x= B\sqrt{\Delta t}R.
+\]
+Defining again $\delta t = \Delta t/N$ and considering $N$ independent random variables $R_i$, each drawn from a normal distribution with zero mean and unitary variance, we obtain
+\[
+\Delta x= \sum_{i=1}^NB\sqrt{\delta t}R_i=B\sqrt{\delta t}\sum_{i=1}^NR_i=B\sqrt{\delta t}\sqrt{N}R=B\sqrt{\Delta t}R,
+\]
+since $\sum_{i=1}^NR_i$ is itself a normal random variable with mean $0$ and variance $N$.\footnote{In the limit $\Delta t \to 0$ the random variables $R_i$ could be drawn from whatever distribution with zero mean and unitary variance since for the Central Limit Theorem $\sum_{i=1}^NR_i$ will converge to a normal distribution with mean $0$ and variance $N$.} Consequently we obtain statistically the same result if we move once for $\Delta t$ or $N$ times for $\Delta t/N$, thus in this case the power of $\Delta t$ must be $1/2$.
+
+Coming back to Eq. \eqref{sd}, in the limit $\Delta t \to 0$ the stochastic part dominates, nevertheless, the deterministic part cannot be neglected since the random contributions tend to cancel out among them.
+
+In a more formal way, we can rephrase Eq. \eqref{sd} as follows.
+\begin{equation}
+dx=A(x,t)dt+B(x,t)dW(t),
+\end{equation}
+where $dW(t)$ is called Wiener noise. 

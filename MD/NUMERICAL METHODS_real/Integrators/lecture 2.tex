@@ -1,0 +1,205 @@
+    \section{Velocity Verlet integrator} \label{sec:velocity_verlet}
+        In order to fix the fundamental concepts from previous section, we recall the properties of Hamilton equations which our integrator should satisfy:
+        \begin{itemize}
+            \item \textbf{Energy conservation}: the total energy of the system $H$ should be conserved in time.
+            \begin{equation}
+                \frac{dH(q,p;t)}{dt}=0
+            \end{equation}
+            \item \textbf{Time reversibility}: given a solution $(q(t),p(t))$ of the motion, taking its backward solution (inverting time) and inverting the velocities $(q(-t),$ $-p(-t))$ it is not possible to distinguish the two trajectories. This is a consequence of the time reversal symmetry of Hamilton equations.
+            \begin{equation}
+                (q(t),p(t))\qquad \equiv \qquad (q(-t),-p(-t))
+            \end{equation}
+            \item \textbf{Incompressibility of the phase space volume}: strictly speaking, this is a property of Liouville equation, but can be translated in a property of Hamilton equations. It states that the density of the phase space remains constant in time. Therefore we can equivalently state that, taking multiple trajectories initialized very close to each others and integrating them, the volume occupied in the phase space remains constant. Formally, Hamilton equations define a transformation in the phase space $U(t_2,t_1)$ such that:
+            \begin{equation}
+                (q(t_2),p(t_2))=U(t_2,t_1)(q(t_1),p(t_1)) \qquad \forall t_2>t_1
+            \end{equation}
+            In order to conserve the volume in the phase space, $U(t_2,t_1)$ should be a unitary transformation. Let $\hat{J}$ be its Jacobian matrix, then:
+            \begin{equation}
+                \det \hat{J}=1 \qquad \text{where} \qquad J_{ij}=\frac{\partial}{\partial x_j(t_1)}x_i(t_2)
+            \end{equation}
+            where $x_i=(q_i,p_i)$ is the position and momenta of particle $i$.
+        \end{itemize}
+            
+            \subsection{Liouville operator}
+
+            We can rewrite the Liouville equation \eqref{liouville_theorem} defining a new operator, called \textbf{Liouville operator}, which acts on the density of the phase space:
+            \begin{equation}
+            \begin{cases}
+                \frac{\partial}{\partial t}\rho(x;t)=-\hat{L}\rho(x;t)\\
+                \hat{L}=\sum_i\frac{\partial}{\partial p_i}H(x)\frac{\partial}{\partial q_i}-\sum_i\frac{\partial}{\partial q_i}H(x)\frac{\partial}{\partial p_i}
+            \end{cases}
+            \end{equation}
+            The Liouville operator can be divided in the sum of two terms, one of which corresponds to partial derivatives with respect to positions, and the other with respect to momenta:
+            \begin{equation}
+                \begin{cases}
+                    \hat{L}=\hat{L}_q+\hat{L}_p\\
+                    \hat{L}_q=\sum_i\frac{\partial}{\partial p_i}H(x)\frac{\partial}{\partial q_i}\\
+                    \hat{L}_p=-\sum_i\frac{\partial}{\partial q_i}H(x)\frac{\partial}{\partial p_i}
+                \end{cases}
+            \end{equation}
+            With this new notation for the Liouville equation, it appears clearly that it is a first order linear partial differential equation. Therefore it can be solved formally, and it will return the density $\rho(x;t)$ at every time and position. Let $\rho(x;t)$ be the density at position $x$ and time $t$, then that at the same position after a period of time $\Delta t$ is:
+            \begin{equation}\label{eq:Liouvillesol}
+                \rho(x;t+\Delta t)=e^{-\Delta t \hat{L}}\rho(x;t)
+            \end{equation}
+            This solution is exact, but only formal. In fact we have only formally rewritten Liouville equation introducing the exponential operator $e^{-\Delta t\hat{L}}$, which is a differential operator that acts on the coordinates $x$.
+            
+            Before continuing in the discussion, we shall spend a few words about the exponential operator $e^{-\Delta t \hat{L}}$. This is in fact another operator, which is defined from the Taylor expansion of the exponential function:
+            \begin{equation}
+                e^{-\Delta t \hat{L}}=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}(\hat{L})^n
+            \end{equation}
+            
+            In the following we will consider only cases in which the Hamiltonian is in the form:
+            \begin{equation}\label{eq:sepHam}
+                H(q,p)=K(p)+U(q)
+            \end{equation}
+            where $K(p)$ is the kinetic energy of the system, and $U(q)$ is the potential energy. This will result in a very simple interpretation of the exponential operators $e^{-\Delta t \hat{L}_q}$, and $e^{-\Delta t \hat{L}_p}$, as we will see.
+            
+            \subsubsection{Action of $\hat{L}_q$}
+            In the case of a 1d free particle:
+            \begin{equation}
+                H=K=\frac{p^2}{2m}
+            \end{equation}
+            and therefore:
+            \begin{equation}
+                \hat{L}=\hat{L}_q=\frac{p}{m}\frac{\partial}{\partial q}
+            \end{equation}
+            The exponential operator is therefore:
+            \begin{align*}
+                e^{-\Delta t \hat{L}}=e^{-\Delta t \hat{L}_q}&=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}(\hat{L}_q)^n=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}\left(\frac{p}{m}\frac{\partial}{\partial q}\right)^n
+            \end{align*}
+            Being $p/m$ independent of $q$, we can take it out of the parenthesis, and therefore:
+            \begin{equation}
+                e^{-\Delta t \hat{L}}=e^{-\Delta t \hat{L}_q}=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}\left(\frac{p}{m}\right)^n\frac{\partial^n}{\partial q^n}
+            \end{equation}
+            In this case the Liouville equation can be solved exactly:
+            \begin{align*}
+                \rho(q,p;t+\Delta t)=e^{-\Delta t \hat{L}}\rho(q,p;t)&=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}\left(\frac{p}{m}\right)^n\frac{\partial^n}{\partial q^n}\rho(q,p;t)=\\
+                &=\sum_{n=0}^\infty\frac{\frac{\partial^n}{\partial q^n}\rho(q,p;t)}{n!}\left(-\Delta t\frac{p}{m}\right)^n
+            \end{align*}
+            We therefore recognize the Taylor expansion of $\rho(q-\Delta t\frac{p}{m},p;t)$. Finally we obtain:
+            \begin{equation}
+                \rho(q,p;t+\Delta t)=\rho(q-\Delta t\frac{p}{m},p;t)
+            \end{equation}
+            It can be seen that this is true for any system with separable Hamiltonian as in \ref{eq:sepHam}. Let $q_i$ be the position of particle $i$ with mass $m_i$ and momentum $p_i$, then it is shifted by a quantity $\Delta t\frac{p_i}{m_i}$.
+            
+            The action of the operator $e^{-\Delta t \hat{L}_q}$ is therefore that of a shift in the phase space along axis $q$ by a quantity $\Delta t \frac{p}{m}$, which is clearly the velocity multiplied by the period of time $\Delta t$ of the particles.
+            \begin{equation}
+                e^{-\Delta t\hat{L}_q}\rho(q,p;t)=\rho(q-\Delta t \frac{p}{m},p;t)
+            \end{equation}
+            
+             It follows that in all these systems, due to the fact that $U(q)$ does not depend on the momenta, the operator $e^{-\Delta t \hat{L}_q}$ always acts as showed.
+            
+            \subsubsection{Action of $\hat{L}_p$}
+            The same reasoning can be applied to the operator $\hat{L}_p$ considering a 1d particle with infinite mass subjected to a force which depends only on the position $f(q)=-\frac{dU}{dq}$, where $U(q)$ is the potential energy.
+            In this case the hamiltonian of the system is:
+            \begin{equation}
+                H=U(q)
+            \end{equation}
+            and therefore:
+            \begin{equation}
+                \hat{L}=\hat{L}_p=f(q)\frac{\partial}{\partial p}
+            \end{equation}
+            and as before:
+            \begin{equation}
+                e^{-\Delta t \hat{L}}=e^{-\Delta t \hat{L}_p}=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}(f(q))^n\frac{\partial^n}{\partial p^n}
+            \end{equation}
+            The Liouville equation can be solved exactly also in this case, because:
+            \begin{align*}
+                \rho(q,p;t+\Delta t)=e^{-\Delta t \hat{L}}\rho(q,p;t)&=\sum_{n=0}^\infty\frac{(-\Delta t)^n}{n!}\left(f(q)\right)^n\frac{\partial^n}{\partial p^n}\rho(q,p;t)=\\
+                &=\sum_{n=0}^\infty\frac{\frac{\partial^n}{\partial p^n}\rho(q,p;t)}{n!}\left(-\Delta t f(q)\right)^n
+            \end{align*}
+            Recognizing the Taylor expansion of $\rho(q,p-\Delta t f(q);t)$, we can therefore write:
+            \begin{equation}
+                \rho(q,p;t+\Delta t)=\rho(q,p-\Delta t f(q);t)
+            \end{equation}
+            It can be shown that this is true also for any system with separable Hamiltonian. Let $f_i(q)=-\frac{\partial U}{\partial q_i}$ be the force acting on particle $i$, then its momentum $p_i$ is shifted by $\Delta t f_i(q)$.
+            
+            The action of the operator $e^{-\Delta t\hat{L}_p}$ is therefore that of a shift in the phase space along axis $p$ by a quantity $\Delta t f(q)$.
+            \begin{equation}
+                e^{-\Delta t\hat{L}_p}\rho(q,p;t)=\rho(q,p-\Delta t f(q);t)
+            \end{equation}
+            
+        \subsection{Velocity Verlet algorithm}
+        In what follows we will show how to use what showed previously in order to construct an algorithm to integrate the equations of motion.
+        
+        In particular we have showed how operators $e^{-\Delta t \hat{L}_q}$ and $e^{-\Delta t \hat{L}_p}$ act on the density function $\rho(q,p;t)$.
+        For a generic system with Hamiltonian:
+        \begin{equation}
+            H(q,p)=K(p)+U(q)
+        \end{equation}
+        the solution to Liouville equation is:
+        \begin{equation}
+            \rho(q,p;t+\Delta t)=e^{-\Delta t (\hat{L}_q+\hat{L}_p)}\rho(q,p;t)
+        \end{equation}
+        Being the exponential an operator, we can not use the usual properties of the exponential function. In particular: \begin{equation}\label{eq:expinequality}
+            e^{-\Delta t (\hat{L}_q+\hat{L}_p)}\neq e^{-\Delta t \hat{L}_q}e^{-\Delta t \hat{L}_p}
+        \end{equation}
+        This is a consequence of the fact that the operators $\hat{L}_q$ and $\hat{L}_p$ don't commute. In fact expanding at second order the exponent on the left:
+        \begin{align*}
+            e^{-\Delta t (\hat{L}_q+\hat{L}_p)}&= 1-\Delta t\hat{L}_q-\Delta t\hat{L}_p+\frac{\Delta t^2}{2}(\hat{L}_q+\hat{L}_p)(\hat{L}_q+\hat{L}_p)+o(\Delta t^3)=\\
+            &= 1-\Delta t\hat{L}_q-\Delta t\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_q^2+\frac{\Delta t^2}{2}\hat{L}_p^2+...\\ &\quad...+\frac{\Delta t^2}{2}\hat{L}_q\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_p\hat{L}_q+o(\Delta t^3)
+        \end{align*} 
+        while expanding the exponent on the right:
+        \begin{align*}
+            e^{-\Delta t \hat{L}_q}e^{-\Delta t \hat{L}_p}&=(1-\Delta t\hat{L}_q+\frac{\Delta t^2}{2}\hat{L}_q^2)(1-\Delta t\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_p^2)+o(\Delta t^3)=\\
+            &= 1-\Delta t\hat{L}_q-\Delta t\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_q^2+\frac{\Delta t^2}{2}\hat{L}_p^2+\Delta t^2\hat{L}_q\hat{L}_p+o(\Delta t^3)
+        \end{align*}
+        Then at second order:
+        \begin{equation}
+            e^{-\Delta t \hat{L}_q}e^{-\Delta t \hat{L}_p}-e^{-\Delta t (\hat{L}_q+\hat{L}_p)}=\frac{\Delta t^2}{2}\left(\hat{L}_q\hat{L}_p-\hat{L}_p\hat{L}_q\right)+o(\Delta t^3)
+        \end{equation}
+        and the equivalence holds only if $\hat{L}_q$ and $\hat{L}_p$ commute. This is in general not true, since partial derivatives in $q$ don't commute with those in $p$.             
+        
+        We can however show that, for $\Delta t$ infinitesimal, the following expression, called \textbf{Trotter splitting}, holds:
+        \begin{equation}\label{eq_trotter_splitting}
+            e^{-\Delta t (\hat{L}_q+\hat{L}_p)}= e^{-\frac{\Delta t}{2} \hat{L}_p}e^{-\Delta t \hat{L}_q}e^{-\frac{\Delta t}{2} \hat{L}_p}+o(\Delta t^3)
+        \end{equation}
+        In fact, analogously to what done previously:
+        \begin{align*}
+             e^{-\frac{\Delta t}{2} \hat{L}_p}e^{-\Delta t \hat{L}_q}e^{-\frac{\Delta t}{2}\hat{L}_p}&= (1-\frac{\Delta t}{2}\hat{L}_p+\frac{\Delta t^2}{8}\hat{L}_p^2)(1-\Delta t\hat{L}_q+\frac{\Delta t^2}{2}\hat{L}_q^2)\cdot...\\&\quad...\cdot(1-\frac{\Delta t}{2}\hat{L}_p+\frac{\Delta t^2}{8}\hat{L}_p^2)+o(\Delta t^3)=\\
+            &= 1-\Delta t\hat{L}_q-\Delta t\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_q^2+\frac{\Delta t^2}{2}\hat{L}_p^2+...\\&\quad ...+\frac{\Delta t^2}{2}\hat{L}_q\hat{L}_p+\frac{\Delta t^2}{2}\hat{L}_p\hat{L}_q+o(\Delta t^3)
+        \end{align*}
+        from which the identity.
+        
+        Finally, approximating at second order in $\Delta t$, we can rewrite the solution to Liouville equation as:
+        \begin{equation}
+            \rho(q,p;t+\Delta t)\approx e^{-\frac{\Delta t}{2} \hat{L}_p}e^{-\Delta t \hat{L}_q}e^{-\frac{\Delta t}{2} \hat{L}_p} \rho(q,p;t)
+        \end{equation}
+        We can therefore divide the integration in 3 steps:
+        \begin{enumerate}
+            \item Firstly we apply the operator $e^{-\frac{\Delta t}{2} \hat{L}_p}$. As showed, this results in a shift of the momentum by a quantity $f(q)\frac{\Delta t}{2}$, where $q$ is the position at time $t$.
+            \item Secondly we apply $e^{-\Delta t \hat{L}_q}$, which results in a shift of the position by a quantity $\frac{p}{m}\Delta t$, where $p$ is the updated momentum from the first step.
+            \item Finally, we apply again $e^{-\frac{\Delta t}{2} \hat{L}_p}$. This corresponds to a shift of the momentum by a quantity $f(q)\frac{\Delta t}{2}$, where $q$ is the updated position at time $t+\Delta t$, computed in the second step.
+        \end{enumerate}
+        
+        We can therefore construct an algorithm, called \textbf{Velocity Verlet}, which integrates the equation of motions computing both the position and the momentum at each time-step.
+        
+        \begin{algorithm}[H]
+			\caption{Velocity Verlet algorithm}
+            \label{alg:velocity_verlet}
+			\begin{algorithmic}[1]
+				\For{$i=1,...,nsteps$}
+				\State $p=p+f*\Delta t/2$
+				\State $q=q+p/m *\Delta t$
+				\State$f=force(q)$
+				\State $p=p+f*\Delta t/2$	
+				\EndFor
+			\end{algorithmic}
+		\end{algorithm}
+		
+		This integrator can be written as a system of equations:
+		\begin{equation}
+		    \begin{cases}
+		            q(t+\Delta t)=q(t)+\frac{p(t)}{m}\Delta t+\frac{f(t)}{2m}\Delta t^2\\
+		            p(t+\Delta t)=p(t)+\frac{f(t)}{2}\Delta t+\frac{f(t+\Delta t)}{2}\Delta t\\
+		    \end{cases}
+		\end{equation}
+		
+		\subsubsection{Properties of the Velocity Verlet integrator}\label{chapt:properites_vel_verlet}
+		As mentioned previously, Hamilton equations satisfy energy conservation, time reversibility and incompressibility of the volume of the phase space. 
+		
+		The Velocity Verlet integrator does not conserve energy exactly, but only approximately if $\Delta t$ is sufficiently small. This is due to the fact that the equations of motion are integrated using different Hamiltonians at each step. In particular, at step 1 of Trotter splitting they are integrated considering the particle having an infinite mass. Then at step 2 it is considered as a free particle, and finally at step 3 again as having infinite mass. This clearly introduces an error in the energy of the system, which can be however very small if $\Delta t$ is chosen appropriately.
+		
+		On the other hand, the integrator satisfies time reversibility, because the Trotter splitting used is time reversible. In particular, each step is time reversible, being the exact solution of Hamilton equations, and the 3 steps are applied in a time reversible order.
+		
+		Finally, Velocity Verlet satisfies also incompressibility. This can be showed directly computing the Jacobian matrix for each step of Trotter splitting, from which it can be shown that its determinant is always 1. However, it is more instructive showing it using the fact that each step of the Trotter splitting is an exact solution of Hamilton equations, which in turn satisfy incompressibility.
